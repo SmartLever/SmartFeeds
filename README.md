@@ -1,6 +1,6 @@
 # SmartFeed #
 
-**SmartFeeds** is an innovative Python tool that filters out noise from the vast amount of daily tweets, 
+**SmartFeeds** is an innovative Python tool that filters out noise from the vast amount of daily social media posts, 
 helping users save time. It uses OpenAI algorithms to analyze and identify the most discussed social media narratives, 
 providing a concise summary that highlights key ideas and topics of interest.
 
