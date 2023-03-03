@@ -6,6 +6,7 @@ import pandas as pd
 import query_data
 import pytz
 import schedule
+import time
 
 
 def main(users,output_file = "tweets_crypto"):
@@ -25,11 +26,12 @@ def main(users,output_file = "tweets_crypto"):
     #tweets = pd.read_pickle("tweets_crypto.pkl")
 
     # get tweets from last 24 hours
-    last_24 = dt.datetime.now(pytz.UTC) - dt.timedelta(days=1)
+    last_24 = dt.datetime.now(pytz.UTC) - dt.timedelta(hours=24)
     tweets = [ tweet for tweet in tweets  if tweet.created_at >= last_24]
 
-    docs = query_data.create_thread_docs(tweets,filer_len=2)
+    docs = query_data.create_thread_docs(tweets, filer_len=2)
 
+    # create full text form docs
     msg = query_data.query(docs)
 
     messageText = f'{dt.date.today()} Last 24 hours: \n' + msg
@@ -45,6 +47,10 @@ if __name__ == "__main__":
              '@CryptoShiro_', '@0xsurferboy', '@0xkyle__', '@EnzCrypto_', '@theirish_man', '@JA_Maartun', '@ali_charts',
              '@RunnerXBT', '@_FabianHD', '@__bleeker', '@0xJezza', '@imajinthesmell', '@MasalaOfCharts',
              '@PuggyTrades', '@BeraGrizzly', '@bxresearch']
-    #main(users,output_file = "tweets_crypto")
+    main(users,output_file = "tweets_crypto")
 
-    schedule.every().day.at("10:00").do(main, users, output_file = "tweets_crypto")
+    #schedule.every().day.at("10:00").do(main, users, output_file = "tweets_crypto")
+
+    #while True:
+        #schedule.run_pending()
+        #time.sleep(1)

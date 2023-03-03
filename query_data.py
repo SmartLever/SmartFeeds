@@ -1,8 +1,9 @@
 from langchain import OpenAI, PromptTemplate, LLMChain
+from langchain.llms import OpenAIChat
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.chains.mapreduce import MapReduceChain
 from langchain.prompts import PromptTemplate
 from langchain.docstore.document import Document
+from langchain.chains.mapreduce import MapReduceChain
 import os
 import configparser
 import datetime as dt
@@ -13,11 +14,18 @@ config.read('config.ini')
 os.environ["OPENAI_API_KEY"] = config['openai']['api_key']
 
 
-prompt_narrative_crypto = """Create a list of the main crypto tokens and their narratives mentioned in the tweets:
+prompt_narrative_crypto = """Create a list of crypto $TOKEN from the text and follow this guide:
+                             1) Tokens mentioned in the tweets should be in the format $TOKEN
+                             2) Unify information for each $TOKEN.
+                             3) For each $TOKEN, inclued narrative  or relevant information.
+                             4) Add catalysts for each token if possible.
+                             5) if No specific $TOKEN mentioned, include a general narrative.
+    response example: "1) $BTC:  Posible pump due to Elon Musk's tweet. Catalyst: Next convention in march.
+                       2) $HPK:  Strong narrative  Catalyst: No info."
+
+
 
    {text}
-
-
    """
 
 
@@ -45,18 +53,22 @@ def create_thread_docs(tweets,filer_len=2):
 
 
     # Join tweets from each thread into a single string
-    docs = []
+    doc = []
+    full_text = ''
     for k in threads.keys():
         screen_name = '@'+threads[k][0].user.screen_name
         thread_text = ' '.join([tweet.full_text for tweet in threads[k]])
-        docs.append(Document(page_content=thread_text, metadata={'screen_name':screen_name}))
-
-    return docs
+        doc.append(Document(page_content=thread_text, metadata={'screen_name': screen_name}))
+        full_text += '----' +thread_text
+    return doc
 
 
 def query(docs, prompt_template=prompt_narrative_crypto):
-    llm = OpenAI(temperature=0)
+    llm = OpenAIChat(temperature=0)
 
     PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
     chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
     return chain.run(docs)
+
+
+

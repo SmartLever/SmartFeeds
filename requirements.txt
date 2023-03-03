@@ -1,3 +1,5 @@
 langchain
 requests
 schedule
+tweepy
+tiktoken
