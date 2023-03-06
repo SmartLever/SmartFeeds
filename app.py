@@ -47,7 +47,7 @@ if __name__ == "__main__":
              '@CryptoShiro_', '@0xsurferboy', '@0xkyle__', '@EnzCrypto_', '@theirish_man', '@JA_Maartun', '@ali_charts',
              '@RunnerXBT', '@_FabianHD', '@__bleeker', '@0xJezza', '@imajinthesmell', '@MasalaOfCharts',
              '@PuggyTrades', '@BeraGrizzly', '@bxresearch']
-    #main(users,output_file = "tweets_crypto")
+    main(users,output_file = "tweets_crypto")
 
     schedule.every().day.at("10:00").do(main, users, output_file = "tweets_crypto")
 

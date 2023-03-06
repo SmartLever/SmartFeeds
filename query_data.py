@@ -15,15 +15,17 @@ os.environ["OPENAI_API_KEY"] = config['openai']['api_key']
 
 
 prompt_narrative_crypto = """Create a list of crypto $TOKEN from the text and follow this guide:
-                             1) Tokens mentioned in the tweets should be in the format $TOKEN
+                             1) Tokens mentioned in the tweets should be in the format $TOKEN, but not necessarily.
                              2) Unify information for each $TOKEN.
                              3) For each $TOKEN, inclued narrative  or relevant information.
                              4) Add catalysts for each token if possible.
-                             5) if No specific $TOKEN mentioned, include a general narrative.
-    response example: "1) $BTC:  Posible pump due to Elon Musk's tweet. Catalyst: Next convention in march.
-                       2) $HPK:  Strong narrative  Catalyst: No info."
-
-
+                             5) if No specific $TOKEN mentioned, join all the text together.
+    response list example: "1) $BTC:  Posible pump due to Elon Musk's tweet. Catalyst: Next convention in march.
+                       2) $HPK:  Strong narrative  Catalyst: No info.
+                       3) General Narrative:
+                          - Many altcoins are currently experiencing a significant drop in price.
+                          - CPI data is expected to be released today.
+                       "
 
    {text}
    """
