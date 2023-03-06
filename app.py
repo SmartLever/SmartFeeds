@@ -20,10 +20,10 @@ def main(users,output_file = "tweets_crypto"):
 
     start_date = dt.datetime.today() - dt.timedelta(days=2)
     end_date = dt.datetime.today() + dt.timedelta(days=1)
-    #tweets = download_data.run(users, start_date, end_date, output_file = output_file)
+    tweets = download_data.run(users, start_date, end_date, output_file = output_file)
 
     # read tweets from file
-    tweets = pd.read_pickle("tweets_crypto.pkl")
+    #tweets = pd.read_pickle("tweets_crypto.pkl")
 
     # get tweets from last 24 hours
     last_24 = dt.datetime.now(pytz.UTC) - dt.timedelta(hours=24)
