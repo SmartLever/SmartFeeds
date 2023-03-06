@@ -14,21 +14,27 @@ config.read('config.ini')
 os.environ["OPENAI_API_KEY"] = config['openai']['api_key']
 
 
-prompt_narrative_crypto = """Create a list of crypto $TOKEN from the text and follow this guide:
-                             1) Tokens mentioned in the tweets should be in the format $TOKEN, but not necessarily.
-                             2) Unify information for each $TOKEN.
-                             3) For each $TOKEN, inclued narrative  or relevant information.
-                             4) Add catalysts for each token if possible.
-                             5) if No specific $TOKEN mentioned, join all the text together.
-    response list example: "1) $BTC:  Posible pump due to Elon Musk's tweet. Catalyst: Next convention in march.
-                       2) $HPK:  Strong narrative  Catalyst: No info.
-                       3) General Narrative:
-                          - Many altcoins are currently experiencing a significant drop in price.
-                          - CPI data is expected to be released today.
-                       "
 
-   {text}
-   """
+prompt_narrative_crypto = """Given the following text:"{text}"
+
+Create a list of crypto tokens with the corresponding narratives
+and potential catalysts for each token. Use the following guidelines:
+
+Use the format $TOKEN or TOKEN is used when mentioning a specific token in the tweets.
+If no specific $TOKEN is mentioned, summarize the general narrative.
+Unify information for each $TOKEN.
+Include relevant information for each $TOKEN, such as market trends, news, or events.
+Add potential catalysts for each token if possible.
+
+After creating the list, structure your response as follows:
+
+"1) $TOKEN1: [narrative]. Catalysts: [potential catalysts].
+2) $TOKEN2: [narrative]. Catalysts: [potential catalysts].
+.....
+n) $TOKENn: [narrative]. Catalysts: [potential catalysts].
+General Narrative: [general summary of market trends]."
+
+"""
 
 
 def create_thread_docs(tweets,filer_len=2):
@@ -70,6 +76,7 @@ def query(docs, prompt_template=prompt_narrative_crypto):
 
     PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
     chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
+
     return chain.run(docs)
 
 
