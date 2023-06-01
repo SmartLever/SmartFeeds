@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  my_audio_project:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: ["python", "app_summaries.py"]
